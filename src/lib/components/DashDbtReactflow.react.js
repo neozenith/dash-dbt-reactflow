@@ -8,7 +8,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'reactflow';
-import 'reactflow/dist/style.css';
+import "reactflow/dist/style.css";
+
 
 const nodes = [
     {
@@ -31,7 +32,7 @@ const DashDbtReactflow = (props) => {
     const {id, label, setProps, value} = props;
 
     return (
-        <div id={id} style={{ width: '100%', height: '100%' }}>
+        <div id={id}>
             ExampleComponent: {label}&nbsp;
             <input
                 value={value}
@@ -49,8 +50,9 @@ const DashDbtReactflow = (props) => {
                 }
             />
             <hr />
-            <div  style={{ height: '100%' }}>
-                <ReactFlow nodes={nodes}>
+            {/* https://reactflow.dev/docs/guides/troubleshooting/#the-react-flow-parent-container-needs-a-width-and-a-height-to-render-the-graph */}
+            <div id={id + '-react-flow'} style={{height: '100vh'}} >
+                <ReactFlow nodes={nodes} >
                     <Background />
                     <Controls />
                 </ReactFlow>
