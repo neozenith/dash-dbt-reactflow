@@ -10,59 +10,60 @@ import ReactFlow, {
 } from 'reactflow';
 import "reactflow/dist/style.css";
 
-
-const nodes = [
-    {
-      id: '1',
-      data: { label: 'Hello' },
-      position: { x: 0, y: 0 },
-      type: 'input',
-    },
-    {
-      id: '2',
-      data: { label: 'World' },
-      position: { x: 100, y: 100 },
-    },
-  ];
-
 /**
  * Dash dbt visual builder using Reactflow
  */
 const DashDbtReactflow = (props) => {
-    const {id, label, setProps, value} = props;
+    const {
+        id,
+        nodes,
+        edges,
+        background,
+        controls,
+        minimap,
+        backgroundProps,
+        controlsProps,
+        minimapProps,
+        style,
+        setProps
+    } = props;
+
+    const [currentNodes, setNodes, onNodesChange] = useNodesState(nodes);
+    const [currentEdges, setEdges, onEdgesChange] = useEdgesState(edges);
+
+    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
     return (
-        <div id={id}>
-            ExampleComponent: {label}&nbsp;
-            <input
-                value={value}
-                onChange={
-                    /*
-                        * Send the new value to the parent component.
-                        * setProps is a prop that is automatically supplied
-                        * by dash's front-end ("dash-renderer").
-                        * In a Dash app, this will update the component's
-                        * props and send the data back to the Python Dash
-                        * app server if a callback uses the modified prop as
-                        * Input or State.
-                        */
-                    e => setProps({ value: e.target.value })
-                }
-            />
-            <hr />
-            {/* https://reactflow.dev/docs/guides/troubleshooting/#the-react-flow-parent-container-needs-a-width-and-a-height-to-render-the-graph */}
-            <div id={id + '-react-flow'} style={{height: '100vh'}} >
-                <ReactFlow nodes={nodes} >
-                    <Background />
-                    <Controls />
-                </ReactFlow>
-            </div>
-            <hr />
-        </div>
-    );
+            <ReactFlow
+            id={id}
+            nodes={currentNodes}
+            edges={currentEdges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            // onNodeDragStop={onNodeDragStop} // TODO: setProps
+            onConnect={onConnect}
+            // fitView={true}
+            style={style}
+            // nodeTypes={nodeTypes}
+        >
+            {background ? <Background {...backgroundProps}/> : null}
+            {controls ? <Controls {...controlsProps}/> : null}
+            {minimap ? <MiniMap {...minimapProps}/> : null}
+        </ReactFlow>
+    )
 }
 
-DashDbtReactflow.defaultProps = {};
+DashDbtReactflow.defaultProps = {
+    nodes: [],
+    edges: [],
+    style: {},
+    background: true,
+    controls: true,
+    minimap: true,
+    backgroundProps: {},
+    controlsProps: {},
+    minimapProps: {}
+};
 
 DashDbtReactflow.propTypes = {
     /**
@@ -71,15 +72,65 @@ DashDbtReactflow.propTypes = {
     id: PropTypes.string,
 
     /**
-     * A label that will be printed when this component is rendered.
+     * The nodes which make up the flow chart
      */
-    label: PropTypes.string.isRequired,
+    nodes: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+            data: PropTypes.shape({
+                label: PropTypes.string
+            }),
+            position: PropTypes.shape({
+                x: PropTypes.number,
+                y: PropTypes.number
+            })
+        })
+    ),
 
     /**
-     * The value displayed in the input.
+     * The edges which connect the flow chart
      */
-    value: PropTypes.string,
+    edges: PropTypes.arrayOf(
+        PropTypes.object
+    ),
 
+    /**
+     * Whether to show a background
+     */
+    background: PropTypes.bool,
+
+    /**
+     * Whether to show controls
+     */
+    controls: PropTypes.bool,
+
+    /**
+     * Whether to show a minimap
+     */
+    minimap: PropTypes.bool,
+
+    /**
+     * The Props of the Background component
+     * https://reactflow.dev/docs/api/plugin-components/background/
+     */
+    backgroundProps: PropTypes.object,
+
+    /**
+     * The Props of the Controls component
+     * https://reactflow.dev/docs/api/plugin-components/controls/
+     */
+    controlsProps: PropTypes.object,
+
+    /**
+     * The Props of the MiniMap component
+     * https://reactflow.dev/docs/api/plugin-components/minimap/
+     */
+    minimapProps: PropTypes.object,
+
+    /**
+     * The style of the ReactFlow component
+     */
+    style: PropTypes.object,
     /**
      * Dash-assigned callback that should be called to report property changes
      * to Dash, to make them available for callbacks.
