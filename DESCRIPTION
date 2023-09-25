@@ -1,0 +1,13 @@
+Package: dashDbtReactflow
+Title: Dash Custom Component for using Reactflow to manipulate a dbt project.
+Version: 0.0.1
+Description: Dash Custom Component for using Reactflow to manipulate a dbt project.
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: MIT + file LICENSE
+URL: https://github.com/neozenith/dash-dbt-reactflow
+BugReports: https://github.com/neozenith/dash-dbt-reactflow/issues
+Encoding: UTF-8
+LazyData: true
+KeepSource: true

@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "dash-dbt-reactflow"
+version = "0.1.0"
+description = "Dash Custom Component for using Reactflow to manipulate a dbt project."
+authors = ["Josh Peak <neozenith.dev@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+dash = {version = ">=2.0.0", extras = ["dev"]}
+
+
+[tool.poetry.group.dev.dependencies]
+invoke = "^2.2.0"
+md-toc = "^8.2.0"
+pytest = "^7.4.2"
+black = "^23.9.1"
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
