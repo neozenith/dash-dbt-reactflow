@@ -1,18 +1,37 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactFlow, {
+  addEdge,
+  MiniMap,
+  Controls,
+  Background,
+  useNodesState,
+  useEdgesState,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+
+const nodes = [
+    {
+      id: '1',
+      data: { label: 'Hello' },
+      position: { x: 0, y: 0 },
+      type: 'input',
+    },
+    {
+      id: '2',
+      data: { label: 'World' },
+      position: { x: 100, y: 100 },
+    },
+  ];
 
 /**
- * ExampleComponent is an example component.
- * It takes a property, `label`, and
- * displays it.
- * It renders an input with the property `value`
- * which is editable by the user.
+ * Dash dbt visual builder using Reactflow
  */
 const DashDbtReactflow = (props) => {
     const {id, label, setProps, value} = props;
 
     return (
-        <div id={id}>
+        <div id={id} style={{ width: '100%', height: '100%' }}>
             ExampleComponent: {label}&nbsp;
             <input
                 value={value}
@@ -29,6 +48,14 @@ const DashDbtReactflow = (props) => {
                     e => setProps({ value: e.target.value })
                 }
             />
+            <hr />
+            <div  style={{ height: '100%' }}>
+                <ReactFlow nodes={nodes}>
+                    <Background />
+                    <Controls />
+                </ReactFlow>
+            </div>
+            <hr />
         </div>
     );
 }

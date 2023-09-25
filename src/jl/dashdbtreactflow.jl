@@ -6,11 +6,7 @@ export dashdbtreactflow
     dashdbtreactflow(;kwargs...)
 
 A DashDbtReactflow component.
-ExampleComponent is an example component.
-It takes a property, `label`, and
-displays it.
-It renders an input with the property `value`
-which is editable by the user.
+Dash dbt visual builder using Reactflow
 Keyword arguments:
 - `id` (String; optional): The ID used to identify this component in Dash callbacks.
 - `label` (String; required): A label that will be printed when this component is rendered.

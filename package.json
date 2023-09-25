@@ -24,7 +24,8 @@
   "author": "Josh Peak <neozenith.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "reactflow": "^11.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",
@@ -42,9 +43,9 @@
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-react": "^7.14.2",
     "prop-types": "^15.8.1",
-    "react": "^16.8.6",
+    "react": "^18",
     "react-docgen": "^5.4.3",
-    "react-dom": "^16.8.6",
+    "react-dom": "^18",
     "style-loader": "^3.3.3",
     "styled-jsx": "^5.1.2",
     "webpack": "^5.84.1",

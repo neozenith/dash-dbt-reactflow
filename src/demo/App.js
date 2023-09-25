@@ -5,7 +5,7 @@ import { DashDbtReactflow } from '../lib';
 
 const App = () => {
 
-    const [state, setState] = useState({value:'', label:'Type Here'});
+    const [state, setState] = useState({});
     const setProps = (newProps) => {
             setState(newProps);
         };
