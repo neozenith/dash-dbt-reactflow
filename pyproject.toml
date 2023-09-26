@@ -11,6 +11,7 @@ python = "^3.9"
 dash = {version = ">=2.0.0", extras = ["dev"]}
 dbt-core = "^1.6.3"
 dbt-postgres = "^1.6.3"
+dash-ace = "^0.2.1"
 
 
 [tool.poetry.group.dev.dependencies]

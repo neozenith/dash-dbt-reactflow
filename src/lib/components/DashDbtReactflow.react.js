@@ -1,4 +1,5 @@
-import Dagre from '@dagrejs/dagre';
+import ELK from 'elkjs/lib/elk.bundled.js';
+
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactFlow, {
@@ -14,24 +15,42 @@ import ReactFlow, {
 } from 'reactflow';
 import "reactflow/dist/style.css";
 
-const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-const getLayoutedElements = (nodes, edges, options) => {
-    g.setGraph({ rankdir: options.direction, nodesep: 200, ranksep: 200, ranker: 'network-simplex' });
-  
-    edges.forEach((edge) => g.setEdge(edge.source, edge.target));
-    nodes.forEach((node) => g.setNode(node.id, node));
-  
-    Dagre.layout(g);
-  
-    return {
-      nodes: nodes.map((node) => {
-        const { x, y } = g.node(node.id);
-  
-        return { ...node, position: { x, y } };
-      }),
-      edges,
+const elk = new ELK();
+
+const useLayoutedElements = () => {
+    const { getNodes, setNodes, getEdges, fitView } = useReactFlow();
+    const defaultOptions = {
+      'elk.algorithm': 'layered',
+      'elk.layered.spacing.nodeNodeBetweenLayers': 100,
+      'elk.spacing.nodeNode': 80,
     };
+  
+    const getLayoutedElements = useCallback((options) => {
+      const layoutOptions = { ...defaultOptions, ...options };
+      const graph = {
+        id: 'root',
+        layoutOptions: layoutOptions,
+        children: getNodes(),
+        edges: getEdges(),
+      };
+  
+      elk.layout(graph).then(({ children }) => {
+        // By mutating the children in-place we saves ourselves from creating a
+        // needless copy of the nodes array.
+        children.forEach((node) => {
+          node.position = { x: node.x, y: node.y };
+        });
+  
+        setNodes(children);
+        window.requestAnimationFrame(() => {
+          fitView();
+        });
+      });
+    }, []);
+  
+    return { getLayoutedElements };
   };
+  
 
 
 /**
@@ -54,7 +73,8 @@ const DashDbtReactflowFlow = (props) => {
 
     const [currentNodes, setNodes, onNodesChange] = useNodesState(nodes);
     const [currentEdges, setEdges, onEdgesChange] = useEdgesState(edges);
-    const { fitView } = useReactFlow();
+    // const { fitView } = useReactFlow();
+    const { getLayoutedElements } = useLayoutedElements();
   
     const onLayout = useCallback(
       (direction) => {
@@ -80,7 +100,7 @@ const DashDbtReactflowFlow = (props) => {
             onEdgesChange={onEdgesChange}
             // onNodeDragStop={onNodeDragStop} // TODO: setProps
             onConnect={onConnect}
-            fitView={fitView}
+            fitView
             style={style}
             // nodeTypes={nodeTypes}
         >
@@ -88,8 +108,38 @@ const DashDbtReactflowFlow = (props) => {
             {controls ? <Controls {...controlsProps}/> : null}
             {minimap ? <MiniMap {...minimapProps}/> : null}
             <Panel position="top-right">
-                <button onClick={() => onLayout('TB')}>vertical layout</button>
-                <button onClick={() => onLayout('LR')}>horizontal layout</button>
+                <button
+                onClick={() =>
+                    getLayoutedElements({ 'elk.algorithm': 'layered', 'elk.direction': 'DOWN' })
+                }
+                >
+                vertical layout
+                </button>
+                <button
+                onClick={() =>
+                    getLayoutedElements({ 'elk.algorithm': 'layered', 'elk.direction': 'RIGHT' })
+                }
+                >
+                horizontal layout
+                </button>
+                <button
+                onClick={() =>
+                    getLayoutedElements({
+                    'elk.algorithm': 'org.eclipse.elk.radial',
+                    })
+                }
+                >
+                radial layout
+                </button>
+                <button
+                onClick={() =>
+                    getLayoutedElements({
+                    'elk.algorithm': 'org.eclipse.elk.force',
+                    })
+                }
+                >
+                force layout
+                </button>
             </Panel>
         </ReactFlow>
     )

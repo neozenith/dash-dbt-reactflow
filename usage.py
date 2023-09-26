@@ -2,6 +2,7 @@ from dash import Dash, Input, Output, callback, html
 import dash_dbt_reactflow
 import flask
 from dash_dbt_reactflow.dbt.runner import DbtManager, DbtProject
+import dash_ace
 from pathlib import Path
 
 server = flask.Flask(__name__)
