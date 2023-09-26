@@ -5,6 +5,11 @@ from dash_dbt_reactflow.dbt.runner import DbtManager, DbtProject
 import dash_ace
 from pathlib import Path
 
+def node_renderer(node):
+    print(node)
+    return node
+
+
 server = flask.Flask(__name__)
 app = Dash(__name__, 
             server=server,  
@@ -16,6 +21,8 @@ project_manager = DbtManager() # Manage multiple dbt projects if need be.
 project = project_manager.projects['jaffle_shop']
 
 nodes, edges = project.reactflow_parse_graph(width=1024, height=768)
+nodes = [node_renderer(node) for node in nodes]
+
 app.layout = html.Div(
     [
         dash_dbt_reactflow.DashDbtReactflow(
@@ -26,6 +33,8 @@ app.layout = html.Div(
     ], 
     style={"height": "100vh"} # https://reactflow.dev/docs/guides/troubleshooting/#the-react-flow-parent-container-needs-a-width-and-a-height-to-render-the-graph
 )
+
+
 
 ############################# DASH CALLBACKS #############################
 # TODO: DashDbtReactflow should call setProps so that callbacks get triggered.

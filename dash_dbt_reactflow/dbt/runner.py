@@ -108,10 +108,11 @@ class DbtProject:
         edges = []
 
         for k, v in res.nodes.items():
-            if k.split('.')[0] in ["model", "seed"]:
+            node_type = k.split('.')[0]
+            if node_type in ["model", "seed"]:
                 nodes.append({
                     "id": k,
-                    "data": {"label": k},
+                    "data": {"label": f"<div>{k}</div><pre>{v.raw_code}</pre>", "type": node_type, "sql": v.raw_code},
                     "position": {"x":0, "y":0}
                 })
                 if hasattr(v.depends_on, 'nodes'):
