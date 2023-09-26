@@ -1,6 +1,6 @@
 {
   "src/lib/components/DashDbtReactflow.react.js": {
-    "description": "Dash dbt visual builder using Reactflow",
+    "description": "Dash dbt visual builder using ReactFlow and the ReactFlowProvider.",
     "displayName": "DashDbtReactflow",
     "methods": [],
     "props": {

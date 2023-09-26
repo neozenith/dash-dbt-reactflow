@@ -1,5 +1,4 @@
 import shutil
-
 from invoke import task
 
 
@@ -41,3 +40,19 @@ def build(c):
 def ci(c):
     """Run linting and test suite for Continuous Integration."""
     ...
+
+@task
+def dev_db(c):
+    """Start a dev postgres db using docker."""
+    c.run("""
+docker run -d \
+	--name dash-dbt-reactflow-postgres \
+    -p 5432:5432 \
+    -e POSTGRES_DB=jaffle_shop \
+    -e POSTGRES_USER=admin \
+	-e POSTGRES_PASSWORD=mysecretpassword \
+	postgres
+          """)
+    
+
+

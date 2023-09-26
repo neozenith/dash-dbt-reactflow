@@ -1,6 +1,8 @@
 from dash import Dash, Input, Output, callback, html
 
 import dash_dbt_reactflow
+from dash_dbt_reactflow.dbt.runner import DbtManager, DbtProject
+
 
 app = Dash(
     __name__,
@@ -8,27 +10,18 @@ app = Dash(
         {"name": "viewport", "content": "width=device-width, initial-scale=1.0"}
     ],
 )
-nodes = [
-    {
-      "id": '1',
-      "data": { 'label': 'Hello' },
-      "position": { 'x': 0, 'y': 0 },
-      "type": 'input',
-    },
-    {
-      'id': '2',
-      'data': { 'label': 'World' },
-      'position': { 'x': 100, 'y': 100 },
-    },
-  ]
-# TODO: Get a dbt provider for the state of the nodes and edges
-# TODO: events in the react component should trigger Dash callbacks for the dbt serverside project.
+
+project_manager = DbtManager() # Manage multiple dbt projects if need be.
+project = project_manager.projects['jaffle_shop']
+
+nodes, edges = project.reactflow_parse_graph(width=1024, height=768)
+
 app.layout = html.Div(
     [
         dash_dbt_reactflow.DashDbtReactflow(
             id="dbt-reactflow", 
             nodes=nodes, 
-            edges=[], 
+            edges=edges, 
         )
     ], 
     style={"height": "100vh"} # https://reactflow.dev/docs/guides/troubleshooting/#the-react-flow-parent-container-needs-a-width-and-a-height-to-render-the-graph

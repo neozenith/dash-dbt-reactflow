@@ -283,3 +283,6 @@ man/
 R/
 inst/deps/
 deps/
+
+dbt-projects/**/*
+!dbt-projects/README.md

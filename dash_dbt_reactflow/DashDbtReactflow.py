@@ -5,7 +5,7 @@ from dash.development.base_component import Component, _explicitize_args
 
 class DashDbtReactflow(Component):
     """A DashDbtReactflow component.
-Dash dbt visual builder using Reactflow
+Dash dbt visual builder using ReactFlow and the ReactFlowProvider.
 
 Keyword arguments:
 

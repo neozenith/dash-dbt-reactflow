@@ -6,7 +6,7 @@ export dashdbtreactflow
     dashdbtreactflow(;kwargs...)
 
 A DashDbtReactflow component.
-Dash dbt visual builder using Reactflow
+Dash dbt visual builder using ReactFlow and the ReactFlowProvider.
 Keyword arguments:
 - `id` (String; optional): The ID used to identify this component in Dash callbacks.
 - `background` (Bool; optional): Whether to show a background
