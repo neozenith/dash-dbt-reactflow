@@ -14,6 +14,8 @@ app = Dash(
 project_manager = DbtManager() # Manage multiple dbt projects if need be.
 project = project_manager.projects['jaffle_shop']
 
+# TODO: Use Dash Ace Editor for each node to edit the code
+# https://github.com/reasoned-ai/dash-ace
 nodes, edges = project.reactflow_parse_graph(width=1024, height=768)
 
 app.layout = html.Div(
