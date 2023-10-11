@@ -2,7 +2,6 @@
 
 dash-dbt-reactflow is a Dash component library.
 
-# CONTRIBUTING
 
 ## Quick Start
 
